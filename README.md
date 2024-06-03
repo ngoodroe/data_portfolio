@@ -14,6 +14,8 @@ Each download comes as a single year csv in a large folder with hundreds of csvs
 
 The first file is the combine.py which is where I took the multiple csv from the Social security administration and was able to put them into one file so that I could then load them into my SQL (Postgres) server and be able to do work on it.
 
+*Some later py files were from taking data after the SQL step and creating animations in MatPlotLib. These were successful but not ultimately used in the Youtube video.
+
 ## SQL
 
 Once in Postgres I ran a number of different commands to try and find some interesting things, look for a story in the data and pull out any kind of details that might be of note.
