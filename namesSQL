@@ -1,0 +1,145 @@
+Create table names(
+	nam varchar(20),
+	gender varchar(2),
+	tot int,
+	yr int
+);
+
+select *
+from names
+where nam = 'Charles' 
+AND gender = 'M'
+order by yr, gender asc
+;
+
+
+--Get the years that had the biggest booms of total births
+select 
+    yr
+    , sum(tot)
+    , rank() over (order by sum(tot) desc)
+from 
+    names
+group by 
+    yr
+limit
+    30
+;
+
+
+select nam, gender, max(tot) peak
+from names
+group by nam, gender
+order by max(tot) desc
+limit 100
+;
+
+
+-- What are the top 30 names over the course of history of the data
+
+select
+	nam
+	,gender 
+	,sum(tot)
+from
+	names
+group by
+	nam
+	, gender
+order by
+	sum(tot) desc
+limit
+	30
+;
+
+-- The top 50 peaks in names
+
+select
+	nam
+	, year
+	, tot
+    , rank() over (order by tot desc)
+from 
+    names
+limit
+    50
+;
+
+-- FOR THE LINDA PROJECT
+
+Create table names(
+	nam varchar(20),
+	gender varchar(2),
+	tot int,
+	year int
+);
+
+-- Getting all of the Lindas
+
+select
+	*
+from 
+	names
+where 
+	nam = 'Linda' 
+	AND gender = 'F'
+order by 
+	year asc
+;
+
+-- making a new column to give me the rank of each name by each year and gender (in a CTE)
+WITH ranked_names AS (
+    select
+        name,
+        gender,
+        year,
+        tot,
+        RANK() OVER (PARTITION BY year, gender ORDER BY tot DESC) AS name_rank
+    from baby_names
+)
+SELECT name, gender, year, tot, name_rank
+FROM ranked_names
+WHERE name_rank = 1;
+
+-- Making a temp table for the data
+create temp table ranked_names AS (
+    SELECT
+        nam,
+        gender,
+        year,
+        tot,
+        RANK() OVER (PARTITION BY year, gender ORDER BY tot DESC) AS name_rank
+    FROM ssnames
+);
+
+-- First graph, the sheer number of babies born with the name linda connected line graph
+-- the rank graph in a like a bar thing maybe
+-- contrast linda vs mary
+-- a line graph with the line showing how many girls are named the most common name 
+--       and the color changes for each new name
+-- Outlook for linda, last ten years
+
+--The male Linda
+select
+	*
+from
+	ranked_names
+where 1=1
+	and nam = 'Linda'
+	and gender = 'M'
+order by
+	year asc
+;
+
+--The number one names throughout the years
+select
+	nam
+	, year
+	, tot
+from ranked_names
+where 1=1
+	and name_rank = 1
+	and gender = 'F'
+order by
+	year asc
+;
