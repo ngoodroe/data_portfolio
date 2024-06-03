@@ -23,11 +23,11 @@ order by
 -- making a new column to give me the rank of each name by each year and gender (in a CTE)
 WITH ranked_names AS (
     select
-        name,
-        gender,
-        year,
-        tot,
-        RANK() OVER (PARTITION BY year, gender ORDER BY tot DESC) AS name_rank
+        name
+        , gender
+        , year
+        , tot
+        , RANK() OVER (PARTITION BY year, gender ORDER BY tot DESC) AS name_rank
     from baby_names
 )
 SELECT name, gender, year, tot, name_rank
@@ -37,11 +37,11 @@ WHERE name_rank = 1;
 -- Making a temp table for the data
 create temp table ranked_names AS (
     SELECT
-        nam,
-        gender,
-        year,
-        tot,
-        RANK() OVER (PARTITION BY year, gender ORDER BY tot DESC) AS name_rank
+        nam
+        , gender
+        , year
+        , tot
+        , RANK() OVER (PARTITION BY year, gender ORDER BY tot DESC) AS name_rank
     FROM ssnames
 );
 
